@@ -15,24 +15,24 @@ _line_parser = re.compile(r"""
     .* \[(?P<timestamp>.*?)\]\s+               # timestamps are inside square brackets
     [\"\“\”]+(?P<request> .*)[\"\“\”]+\s+      # isolates the request
     (?P<status> \w+)\s+                        # isolates the status code
-    (?P<bytes> [\d-]+)                         # this is the number of bytes, or a '-' which we treat as 0
-""",re.VERBOSE)
+    (?P<szBytes> [\d-]+)                         # this is the number of bytes, or a '-' which we treat as 0
+""", re.VERBOSE)
 
 def logLineParser(line):
     results = _line_parser.search(line)
-    if results == None:
+    if results is None:
         raise ValueError("Line does not match log format\n(%s)\n" % line)
 
     # we can do optional parsing here
     try:
-        bytes = int(results.group('bytes'))
-    except:
-        bytes = 0
+        szBytes = int(results.group('szBytes'))
+    except ValueError:
+        szBytes = 0
     return (results.group('host'), results.group('timestamp'), results.group('request'),
-            results.group('status'), bytes)
+            results.group('status'), szBytes)
 
-months = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5,'Jun':6,'Jul':7,
-          'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
+months = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7,
+          'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
 
 def timestampParser(timestamp_str):
     """Wrapper for format in logfile, which is
@@ -42,11 +42,11 @@ def timestampParser(timestamp_str):
     date parser. It is in a try/except block that defaults to strptime
     in case the date format (particularly month abbreviations) are slightly incorrect
     """
-    date, hh,mm,ss = timestamp_str[:-6].split(':')
-    D,M,Y = date.split('/')
+    date, hh, mm, ss = timestamp_str[:-6].split(':')
+    D, M, Y = date.split('/')
     try:
         M = months[M]
-        D,Y,hh,mm,ss = map(int, [D,Y,hh,mm,ss])
-        return datetime(Y,M,D,hh,mm,ss)
+        D, Y, hh, mm, ss = map(int, [D, Y, hh, mm, ss])
+        return datetime(Y, M, D, hh, mm, ss)
     except:
         return datetime.strptime(timestamp_str[:-6], "%d/%b/%Y:%H:%M:%S")
