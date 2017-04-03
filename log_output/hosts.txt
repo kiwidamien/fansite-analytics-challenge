@@ -1,1 +1,10 @@
-Output for Feature 1 would go here
+link097.txdirect.net,11
+port26.annex2.nwlink.com,9
+205.189.154.54,7
+199.72.81.55,7
+ppp-mia-30.shadow.net,6
+unicomp6.unicomp.net,5
+netport-27.iu.net,5
+remote27.compusmart.ab.ca,4
+d104.aa.net,4
+dave.dev1.ihub.com,4
