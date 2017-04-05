@@ -32,10 +32,14 @@ import itertools
 These packages should already be installed, so no requirements.txt file is included in the repo. Each package can be installed via `pip` if it not already on your system.
 
 To run the (optional) Jupyter notebooks, you will need a Jupyter installation as well as a few other packages. The following commands should install them.
-```
+```{bash}
 pip install jupyter --upgrade
-pip install panads --upgrade
+pip install pandas --upgrade
 pip install dateutil
+
+pip install geocoder
+pip install matplotlib
+pip install socket
 ```
 
 # Running the project
@@ -175,6 +179,8 @@ There is a lot of overlap in the code listed to produce `hours.txt` and `disjoin
 
 # Summary Notebook
 
+The summary notebook is optional, but helps but some of the data in context. The commentary on the results of the data in Markdown cells assumes that you are running the [sample log](README.md#obtaining-sample-logs). If you run with a different log file, the code will still run, but the commentary may not match the results produced.
+
 ## Obtaining sample logs
 
 You can download a sample log here (427 MB): https://drive.google.com/file/d/0B7-XWjN4ezogbUh6bUl1cV82Tnc/view
@@ -225,20 +231,3 @@ The directory structure for this repo is duplicated below. The files that are in
                     └── hours.txt
                     └── resources.txt
                     └── blocked.txt
-
-
-
-
-
-
-
-
-
-## Instructions to submit your solution
-* To submit your entry please use the link you receieved in your coding challenge invite email
-* You will only be able to submit through the link one time
-* Do NOT attach a file - we will not admit solutions which are attached files
-* Use the submission box to enter the link to your github repo or bitbucket ONLY
-* Link to the specific repo for this project, not your general repo
-* Put any comments in the RADME File inside your Project repo, not in the submission box
-* We are unable to accept coding challenges that are emailed to us

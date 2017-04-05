@@ -1,0 +1,5 @@
+REQINVALID:klothos.crl.research.digital.com - - [10/Jul/1995:16:45:50 -0400] "" 400 -
+REQINVALID:firewall.dfw.ibm.com - - [20/Jul/1995:07:34:34 -0400] "1/history/apollo/images/" 400 -
+REQINVALID:firewall.dfw.ibm.com - - [20/Jul/1995:07:53:24 -0400] "1/history/apollo/images/" 400 -
+REQINVALID:128.159.122.20 - - [20/Jul/1995:15:28:50 -0400] "kƒûtxƒûtGƒûtÍƒû" 400 -
+REQINVALID:128.159.122.20 - - [24/Jul/1995:13:52:50 -0400] "kƒûtxƒûtGƒûtÍƒû" 400 -
