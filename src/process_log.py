@@ -16,7 +16,7 @@ from settings import logFilename
 
 print "Input log is", logFilename['input_log']
 
-input_log = open(logFilename['input_log'])
+f_input = open(logFilename['input_log'])
 blockFH = open(logFilename['blocked'], 'w')
 
 hosts = {}
@@ -24,7 +24,7 @@ resources = {}
 
 ferr = open(logFilename['formatErr'], 'w')
 
-for line_num, line in enumerate(input_log):
+for line_num, line in enumerate(f_input):
     try:
         host, timestamp_string, request, status, bytes = logLineParser(line)
     except:
@@ -65,7 +65,7 @@ for line_num, line in enumerate(input_log):
     if processBlock(timestamp_datetime, host, status):
         blockFH.write(line)
 
-
+f_input.close()
 blockFH.close()
 ferr.close()
 

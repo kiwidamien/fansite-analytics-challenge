@@ -11,5 +11,9 @@ OUT_HOST="$OUTPUTDIR/hosts.txt"
 OUT_HOUR="$OUTPUTDIR/hours.txt"
 OUT_RESOURCES="$OUTPUTDIR/resources.txt"
 OUT_BLOCKED="$OUTPUTDIR/blocked.txt"
+OUT_DISJOINT="$OUTPUTDIR/disjoint_hours.txt"
 
 python ./src/process_log.py $LOGFILE $OUT_HOST $OUT_RESOURCES $OUT_HOUR $OUT_BLOCKED
+
+# Comment this line out if you don't care about the disjoint hours
+python ./src/nonoverlapInterval.py $LOGFILE $OUT_DISJOINT

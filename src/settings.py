@@ -2,6 +2,12 @@
 import datetime
 import sys
 
+# pad sys.argv
+# normally I would use getopt, but I am not sure it will
+# be installed on other systems
+while len(sys.argv) < 6:
+    sys.argv.append('')
+
 logFilename = {
     'input_log':  sys.argv[1],
     'host':       sys.argv[2],
