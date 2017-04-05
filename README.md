@@ -181,6 +181,8 @@ There is a lot of overlap in the code listed to produce `hours.txt` and `disjoin
 
 The summary notebook is optional, but helps but some of the data in context. The commentary on the results of the data in Markdown cells assumes that you are running the [sample log](README.md#obtaining-sample-logs). If you run with a different log file, the code will still run, but the commentary may not match the results produced.
 
+If you don't have Jupyter installed, you can view the notebook directly on GitHub.
+
 ## Obtaining sample logs
 
 You can download a sample log here (427 MB): https://drive.google.com/file/d/0B7-XWjN4ezogbUh6bUl1cV82Tnc/view
@@ -212,7 +214,7 @@ The directory structure for this repo is duplicated below. The files that are in
     ├── profiling
     |   ├── Profiler.ipynb
     |   └── Summary.ipynb
-    ├── insight_testsuite
+    └── insight_testsuite
         ├── run_tests.sh
         └── tests
             └── test_features
@@ -223,10 +225,10 @@ The directory structure for this repo is duplicated below. The files that are in
             |   │   └── hours.txt
             |   │   └── resources.txt
             |   │   └── blocked.txt
-            ├── your-own-test
+            └── your-own-test
                 ├── log_input
                 │   └── your-own-log.txt
-                |__ log_output
+                └── log_output
                     └── hosts.txt
                     └── hours.txt
                     └── resources.txt
