@@ -2,28 +2,15 @@
 1. [Project description](README.md#project-description)
 2. [Installing the project](README.md#installing-the-project)
 3. [Running the project](README.md#running-the-project)
-3. [Description of data](README.md#description-of-data)
-4. [Description of output logs](README.md#description-of-output-logs)
-5. [Summary Notebook](README.md#summary-notebook)
+4. [Description of data](README.md#description-of-data)
+5. [Description of output logs](README.md#description-of-output-logs)
+6. [Summary Notebook](README.md#summary-notebook)
 
-Appendix
+### Appendices
 
-<ol type="A">
-  <li> [Obtaining sample logs](README.md#obtaining-sample-logs)</li>
-  <li> [Directory structure](README.md#directory-structure)</li>
-  <li> [Directory structure](README.md#directory-structure)</li>
-</ol>
+1. [Obtaining sample logs](README.md#obtaining-sample-logs)</li>
+2. [Directory structure](README.md#directory-structure)</li>
 
-
-1. [Challenge Summary](README.md#challenge-summary)
-2. [Details of Implementation](README.md#details-of-implementation)
-3. [Download Data](README.md#download-data)
-4. [Description of Data](README.md#description-of-data)
-5. [Writing clean, scalable, and well-tested code](README.md#writing-clean-scalable-and-well-tested-code)
-6. [Repo directory structure](README.md#repo-directory-structure)
-7. [Testing your directory structure and output format](README.md#testing-your-directory-structure-and-output-format)
-8. [Instructions to submit your solution](README.md#instructions-to-submit-your-solution)
-9. [FAQ](README.md#faq)
 
 # Project Description
 
@@ -164,6 +151,22 @@ e.g. `lineFormatErrorLog.txt`:
     REQINVALID:firewall.dfw.ibm.com - - [20/Jul/1995:07:53:24 -0400] "1/history/apollo/images/" 400 -
     REQINVALID:128.159.122.20 - - [20/Jul/1995:15:28:50 -0400] "k<83><FB>^Ctx<83><FB>^DtG<83><FB>^Gt̓<FB>" 400 -
     REQINVALID:128.159.122.20 - - [24/Jul/1995:13:52:50 -0400] "k<83><FB>^Ctx<83><FB>^DtG<83><FB>^Gt̓<FB>" 400 -
+    ...
+
+
+#### `time_of_day.txt` (BONUS feature)
+
+This is a file with 24 lines in it, telling us how many visits the website during each hour of the day, aggregated over all days. This should give an idea of when the quiet periods are, so that server maintenance can be scheduled to minimize disruption.
+
+e.g. `time_of_day.txt`:
+
+    00:00:00,144824
+    01:00:00,123024
+    02:00:00,104847
+    ...
+    23:00:00,161074
+
+This tells us there were 144824 visitors between midnight and 00:59:59 aggregated over all days, 123024 between 01:00:00 and 01:59:59, et cetera.
 
 ##### Implementation note:
 
@@ -198,6 +201,7 @@ The directory structure for this repo is duplicated below. The files that are in
     |   ├── disjoint_hours.txt
     |   ├── resources.txt
     |   ├── blocked.txt
+    |   ├── time_of_day.txt
     |   └── lineFormatErrorLog.txt
     ├── profiling
     |   ├── Profiler.ipynb

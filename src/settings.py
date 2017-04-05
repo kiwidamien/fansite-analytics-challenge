@@ -5,7 +5,7 @@ import sys
 # pad sys.argv
 # normally I would use getopt, but I am not sure it will
 # be installed on other systems
-while len(sys.argv) < 6:
+while len(sys.argv) < 7:
     sys.argv.append('')
 
 logFilename = {
@@ -14,10 +14,11 @@ logFilename = {
     'resource':   sys.argv[3],
     'period':     sys.argv[4],
     'blocked':    sys.argv[5],
+    'timeofday':  sys.argv[6],
     'formatErr':   './log_output/lineFormatErrorLog.txt'
 }
 
-if len(sys.argv) > 6:
+if len(sys.argv) > 7:
     logFilename['formatErr'] = sys.argv[6]
 
 popularity_interval = datetime.timedelta(0,3600)  # in seconds

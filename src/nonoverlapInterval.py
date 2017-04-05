@@ -101,6 +101,8 @@ def flushActiveIntervals( line_num, before_time ):
 
 print "we have tried to open", logFile, "for sure"
 for line_num, line in enumerate(f_input):
+    if (line_num % 100000):
+        print "Processing line {}".format(line_num)
     host, timestamp_string, request, status, bytes = logLineParser(line)
 
 
@@ -116,8 +118,6 @@ for line_num, line in enumerate(f_input):
     active_intervals.append( [line_num, timestamp_datetime, timestamp_string])
 
 
-    if (line_num % 10000 == 0):
-        print "Finished line", line_num, "size of active_intervals = ",len(active_intervals)
 
 f_input.close()
 

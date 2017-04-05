@@ -18,6 +18,7 @@ blockFH = open(logFilename['blocked'], 'w')
 
 hosts = {}
 resources = {}
+hour_in_day = [0]*24
 
 ferr = open(logFilename['formatErr'], 'w')
 
@@ -62,6 +63,10 @@ for line_num, line in enumerate(f_input):
     if processBlock(timestamp_datetime, host, status):
         blockFH.write(line)
 
+    # record which hour this request came in
+    ###################################
+    hour_in_day[timestamp_datetime.hour] += 1
+
 f_input.close()
 blockFH.close()
 ferr.close()
@@ -82,7 +87,13 @@ with open(logFilename['resource'], 'w') as f_resource:
     for resource in popular_resources[:10]:
         f_resource.write(resource[0] + "\n")
 
-# Writing out the most popular times
+# Writing out the most popular timestamps
 ###################################
 with open(logFilename['period'], 'w') as f_popular:
     f_popular.write( writePopular() )
+
+# Writing out the most popular times of day
+with open(logFilename['timeofday'],'w') as f_timeofday:
+    for hour, visits in enumerate(hour_in_day):
+        s = "{:02d}:00:00,{}\n".format(hour, visits)
+        f_timeofday.write(s)
