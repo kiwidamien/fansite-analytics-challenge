@@ -1,6 +1,6 @@
 
 # system libraries
-import sys, getopt
+import sys
 import datetime
 from collections import deque
 
@@ -12,9 +12,6 @@ from blockLog import processBlock
 # altering settings.py will allow you to pick settings that make sense
 # for the project.
 from settings import logFilename
-
-
-print "Input log is", logFilename['input_log']
 
 f_input = open(logFilename['input_log'])
 blockFH = open(logFilename['blocked'], 'w')

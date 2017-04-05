@@ -1,4 +1,20 @@
 # Table of Contents
+1. [Project description](README.md#project-description)
+2. [Installing the project](README.md#installing-the-project)
+3. [Running the project](README.md#running-the-project)
+3. [Description of data](README.md#description-of-data)
+4. [Description of output logs](README.md#description-of-output-logs)
+5. [Summary Notebook](README.md#summary-notebook)
+
+Appendix
+
+<ol type="A">
+  <li> [Obtaining sample logs](README.md#obtaining-sample-logs)</li>
+  <li> [Directory structure](README.md#directory-structure)</li>
+  <li> [Directory structure](README.md#directory-structure)</li>
+</ol>
+
+
 1. [Challenge Summary](README.md#challenge-summary)
 2. [Details of Implementation](README.md#details-of-implementation)
 3. [Download Data](README.md#download-data)
@@ -9,112 +25,47 @@
 8. [Instructions to submit your solution](README.md#instructions-to-submit-your-solution)
 9. [FAQ](README.md#faq)
 
+# Project Description
 
-# Challenge Summary
+This project parses a log file from a web server, modeled off a NASA webserver. The goal is to monitor traffic, and provide useful summaries of the server logs about which resources are popular, who is requesting the information, and implement basic security measures.
 
-Picture yourself as a backend engineer for a NASA fan website that generates a large amount of Internet traffic data. Your challenge is to perform basic analytics on the server log file, provide useful metrics, and implement basic security measures. 
+This is a project done for the Insight Data Engineering application. I have copied parts of their README.md verbatim, particularly in the [directory structure](README#directory-structure) and [description of data](README.md#description-of-data) sections.
 
-The desired features are described below: 
+# Installing the project
 
-### Feature 1: 
-List the top 10 most active host/IP addresses that have accessed the site.
+The python package requirements for the base project are reasonably standard:
+```
+import re     # for regular expressions
+import heapq  # min heap Implementation
+import datetime
+import sys
+import collections
+import itertools
+```
+These packages should already be installed, so no requirements.txt file is included in the repo. Each package can be installed via `pip` if it not already on your system.
 
-### Feature 2: 
-Identify the 10 resources that consume the most bandwidth on the site
+To run the (optional) Jupyter notebooks, you will need a Jupyter installation as well as a few other packages. The following commands should install them.
+```
+pip install jupyter --upgrade
+pip install panads --upgrade
+pip install dateutil
+```
 
-### Feature 3:
-List the top 10 busiest (or most frequently visited) 60-minute periods 
+# Running the project
 
-### Feature 4: 
-Detect patterns of three failed login attempts from the same IP address over 20 seconds so that all further attempts to the site can be blocked for 5 minutes. Log those possible security breaches.
+In the top level of the repository, you can run
+```{bash}
+$ ./run.sh
+```
+to produce all the output files.
 
+The Jupyter notebooks can be run from the top level as well by running
+```{bash}
+$ jupyter notebook
+```
+and then navigating to the appropriate notebook in the profile directory. It is important **not** to launch the notebook from the profile directory, as this restricts access of the notebook to subdirectories of `profile`, and we need to be able to access the logs.
 
-### Other considerations and optional features
-It's critical that these features don't take too long to run. For example, if it took too long to detect three failed login attempts, further traffic from the same IP address couldn’t be blocked immediately, and that would present a security breach.
-This dataset is inspired by real NASA web traffic, which is very similar to server logs from e-commerce and other sites. Monitoring web traffic and providing these analytics is a real business need, but it’s not the only thing you can do with the data. Feel free to implement additional features that you think might be useful.
-
-## Details of Implementation
-With this coding challenge, you should demonstrate a strong understanding of computer science fundamentals. We won't be wowed by your knowledge of various available software libraries, but will be impressed by your ability to pick and use the best data structures and algorithms for the job.
-
-We're looking for clean, well-thought-out code that correctly implements the desired features in an optimized way and highlights your ability to write production-quality code.
-
-We also want to see how you use your programming skills to solve business problems. At a minimum, you should implement the four required features, but feel free to expand upon this challenge or add other features you think would prevent fraud and further business goals. Be sure to document these add-ons so we know to look for them.
-
-### Feature 1 
-List in descending order the top 10 most active hosts/IP addresses that have accessed the site.
-
-Write to a file, named `hosts.txt`, the 10 most active hosts/IP addresses in descending order and how many times they have accessed any part of the site. There should be at most 10 lines in the file, and each line should include the host (or IP address) followed by a comma and then the number of times it accessed the site. 
-
-e.g., `hosts.txt`:
-
-    example.host.com,1000000
-    another.example.net,800000
-    31.41.59.26,600000
-    …
-
-
-### Feature 2 
-Identify the top 10 resources on the site that consume the most bandwidth. Bandwidth consumption can be extrapolated from bytes sent over the network and the frequency by which they were accessed.
-
-These most bandwidth-intensive resources, sorted in descending order and separated by a new line, should be written to a file called `resources.txt`
-
-
-e.g., `resources.txt`:
-    
-    /images/USA-logosmall.gif
-    /shuttle/resources/orbiters/discovery.html
-    /shuttle/countdown/count.html
-    …
-
-
-### Feature 3 
-List in descending order the site’s 10 busiest (i.e. most frequently visited) 60-minute period.
-
-Write to a file named `hours.txt`, the start of each 60-minute window followed by the number of times the site was accessed during that time period. The file should contain at most 10 lines with each line containing the start of each 60-minute window, followed by a comma and then the number of times the site was accessed during those 60 minutes. The 10 lines should be listed in descending order with the busiest 60-minute window shown first. 
-
-e.g., `hours.txt`:
-
-    01/Jul/1995:00:00:01 -0400,100
-    02/Jul/1995:13:00:00 -0400,22
-    05/Jul/1995:09:05:02 -0400,10
-    01/Jul/1995:12:30:05 -0400,8
-    …
-
-### Feature 4 
-Your final task is to detect patterns of three consecutive failed login attempts over 20 seconds in order to block all further attempts to reach the site from the same IP address for the next 5 minutes. Each attempt that would have been blocked should be written to a log file named `blocked.txt`.
-
-The site’s fictional owners don’t expect you to write the actual web server code to block the attempt, but rather want to gauge how much of a problem these potential security breaches represent. 
-
-Detect three failed login attempts from the same IP address over a consecutive 20 seconds, and then write to the `blocked.txt` file any subsequent attempts to reach the site from the same IP address over the next 5 minutes. 
-
-For example, if the third consecutive failed login attempt within a 20 second window occurred on `01/Aug/1995:00:00:08`, all access to the website for that IP address would be blocked for the next 5 minutes. Even if the same IP host attempted a login -- successful or or not -- one minute later at `01/Aug/1995:00:01:08`, that attempt should be ignored and logged to the `blocked.txt` file. Access to the site from that IP address would be allowed to resume at `01/Aug/1995:00:05:09`.
-
-If an IP address has not reached three failed login attempts during the 20 second window, a login attempt that succeeds during that time period should reset the failed login counter and 20-second clock. 
-
-For example, if after two failed login attempts, a third login attempt is successful, full access should be allowed to resume immediately afterward. The next failed login attempt would be counted as 1, and the 20-second timer would begin there. In other words, this feature should only be triggered if an IP has  3 failed logins in a row, within a 20-second window.
-
-e.g., `blocked.txt`
-
-    uplherc.upl.com - - [01/Aug/1995:00:00:07 -0400] "GET / HTTP/1.0" 304 0
-    uplherc.upl.com - - [01/Aug/1995:00:00:08 -0400] "GET /images/ksclogo-medium.gif HTTP/1.0" 304 0
-    …
-
-The following illustration may help you understand how this feature might work, and when three failed login attempts would trigger 5 minutes of blocking:
-
-
-![Feature 4 illustration](images/feature4.png)
-
-
-Note that this feature should not impact the other features in this challenge. For instance, any requests that end up in the `blocked.txt` file should be counted toward the most active IP host calculation, bandwidth consumption and busiest 60-minute period.
-
-### Additional Features
-
-Feel free to implement additional features that might be useful to derive further metrics or prevent harmful activity. These features will be considered as bonus while evaluating your submission. If you choose to add extras please document them in your README and make sure that they don't interfere with the above four (e.g. don't alter the output of the four core features).
-
-## Download Data
-You can download the data here: https://drive.google.com/file/d/0B7-XWjN4ezogbUh6bUl1cV82Tnc/view
-
-## Description of Data
+# Description of data
 
 Assume you receive as input, a file, `log.txt`, in ASCII format with one line per request, containing the following columns:
 
@@ -137,40 +88,122 @@ e.g., `log.txt`
     uplherc.upl.com - - [01/Aug/1995:00:00:07 -0400] "GET / HTTP/1.0" 304 0
     uplherc.upl.com - - [01/Aug/1995:00:00:08 -0400] "GET /images/ksclogo-medium.gif HTTP/1.0" 304 0
     ...
-    
+
 In the above example, the third line shows a failed login (HTTP reply code of 401) followed by a successful login (HTTP reply code of 200) two seconds later from the same IP address.
 
-## Writing clean, scalable, and well-tested code
+# Description of output logs
 
-As a data engineer, it’s important that you write clean, well-documented code that scales for large amounts of data. For this reason, it’s important to ensure that your solution works well for a huge number of logged events, rather than just the simple examples above.
+Running the file `./run.sh` will give the following files in the log output directory.
 
-For example, your solution should be able to account for a large number of events coming in over a short period of time, and need to keep up with the input (i.e. need to process a minute worth of events in less than a minute).
+#### `host.txt` (Implementation of feature 1)
+A list of the 10 most active host/IP addresses that have accessed the site. Each line contains the hostname, followed by a comma, then the number of times the site was accessed by that host.
 
-It's also important to use software engineering best practices like unit tests, especially since public data is not clean and predictable. For more details about the implementation, please refer to the FAQ below. If further clarification is necessary, email us at <cc@insightdataengineering.com>
+e.g., `hosts.txt`:
 
-You may write your solution in any mainstream programming language such as C, C++, C#, Clojure, Erlang, Go, Haskell, Java, Python, Ruby, or Scala. Once completed, submit a link to a Github repo with your source code.
+    example.host.com,1000000
+    another.example.net,800000
+    31.41.59.26,600000
+    …
 
-In addition to the source code, the top-most directory of your repo must include the `log_input` and `log_output` directories, and a shell script named `run.sh` that compiles and runs the program(s) that implement these features.
+#### `resource.txt` (Implementation of feature 2)
+A list of the 10 most resources that used the most bandwidth, as determined by the number of bytes the request claimed it sent over the network. Each line contains the name of the resource being accessed, and they are sorted from most to least bandwidth.
 
-If your solution requires additional libraries, environments, or dependencies, you must specify these in your `README` documentation. See the figure below for the required structure of the top-most directory in your repo, or simply clone this repo.
+e.g., `resources.txt`:
 
-## Repo directory structure
+    /images/launch-logo.gif
+    /ksc.html
+    /shuttle/countdown/
 
-The directory structure for your repo should look like this:
+#### `hours.txt` (Implementation of feature 3)
+List in descending order the site’s 10 busiest (i.e. most frequently visited) 60-minute period. The file should contain the start of the 60-minute period, followed by a comma, and then the number of visits during that period. The lines are ordered by most visited to least visited.
 
-    ├── README.md 
+e.g. `hours.txt`
+
+    25/Jul/1995:09:59:33 -0400,35040
+    25/Jul/1995:09:59:40 -0400,35033
+    25/Jul/1995:09:59:39 -0400,35033
+    25/Jul/1995:10:00:00 -0400,35030
+    ...
+
+It is important to note that the periods can overlap. If it was particularly busy from 1995-Jul-02:10:00:00 to 11:00:00 it is likely that all of the top ten intervals will overlap this range. Because of this, I added an option feature to produce `disjoint_hours.txt`, described below.
+
+#### `blocked.txt` (Implementation of feature 4)
+
+Detect patterns of three failed login attempts from the same IP address over 20 seconds so that all further attempts to the site can be blocked for 5 minutes. Each blocked request is listed as a separate line in the file `blocked.txt`
+
+e.g. `blocked.txt`
+
+    netport-27.iu.net - - [01/Jul/1995:00:02:01 -0400] "GET /images/USA-logosmall.gif HTTP/1.0" 304 0
+    netport-27.iu.net - - [01/Jul/1995:00:02:04 -0400] "GET /images/WORLD-logosmall.gif HTTP/1.0" 304 0
+    sneaker.oregoncoast.com - - [01/Jul/1995:00:03:03 -0400] "GET /images/KSC-logosmall.gif HTTP/1.0" 304 0
+    teleman.pr.mcs.net - - [01/Jul/1995:00:03:57 -0400] "GET /images/KSC-logosmall.gif HTTP/1.0" 304 0
+    teleman.pr.mcs.net - - [01/Jul/1995:00:04:23 -0400] "GET /shuttle/missions/sts-67/mission-sts-67.html HTTP/1.0" 200 21408
+    ...
+
+#### `disjoint_hours.txt` (BONUS feature)
+
+This attempts to be a more useful version of `hours.txt`, by ensuring that the hours reported do not overlap. The ten busiest hours are reported, with each line of the file containing the timestamp for the beginning of the interval, followed by a comma and then the number of visits during that hour. The lines are ordered from most visited to least visited.
+
+e.g., `disjoint_hours`:
+
+    25/Jul/1995:09:59:34 -0400,35040
+    25/Jul/1995:08:59:19 -0400,26642
+    25/Jul/1995:10:59:36 -0400,24057
+    ...
+
+
+#### `lineFormatErrorLog.txt` (BONUS feature)
+This is a log of all lines in the log that I was unable to parse because they were malformed. By logging them, we are able to keep track of whether we need to make the parser more flexible, or if there is an attempt to hack the site using malformed requests.
+
+The format of this file is a code describing the problem with the request, followed by a copy of the line from the log file.
+
+e.g. `lineFormatErrorLog.txt`:
+
+    REQINVALID:klothos.crl.research.digital.com - - [10/Jul/1995:16:45:50 -0400] "^E^A" 400 -
+    REQINVALID:firewall.dfw.ibm.com - - [20/Jul/1995:07:34:34 -0400] "1/history/apollo/images/" 400 -
+    REQINVALID:firewall.dfw.ibm.com - - [20/Jul/1995:07:53:24 -0400] "1/history/apollo/images/" 400 -
+    REQINVALID:128.159.122.20 - - [20/Jul/1995:15:28:50 -0400] "k<83><FB>^Ctx<83><FB>^DtG<83><FB>^Gt̓<FB>" 400 -
+    REQINVALID:128.159.122.20 - - [24/Jul/1995:13:52:50 -0400] "k<83><FB>^Ctx<83><FB>^DtG<83><FB>^Gt̓<FB>" 400 -
+
+##### Implementation note:
+
+There is a lot of overlap in the code listed to produce `hours.txt` and `disjoint_hours.txt`. After profiling my code, I noted that processing the timestamps were the most significant bottleneck in the code, so I provided separate implementations. If desired, you can run `./src/process_log.py` to skip processing `disjoint_hours.txt` altogether.
+
+
+# Summary Notebook
+
+## Obtaining sample logs
+
+You can download a sample log here (427 MB): https://drive.google.com/file/d/0B7-XWjN4ezogbUh6bUl1cV82Tnc/view
+
+## Directory structure
+
+The directory structure for this repo is duplicated below. The files that are interesting are the files in the output folder (described above) and the jupyter notebooks in the profiling directory.
+
+    ├── README.md
     ├── run.sh
     ├── src
-    │   └── process_log.py
+    │   ├── process_log.py
+    |   ├── blockLog.py
+    |   ├── intervalLog.py
+    |   ├── logParser.py
+    |   ├── nonoverlapInterval.py
+    |   ├── process_log.py
+    |   └── settings.py
     ├── log_input
     │   └── log.txt
     ├── log_output
-    |   └── hosts.txt
-    |   └── hours.txt
-    |   └── resources.txt
-    |   └── blocked.txt
+    |   ├── hosts.txt
+    |   ├── hours.txt
+    |   ├── disjoint_hours.txt
+    |   ├── resources.txt
+    |   ├── blocked.txt
+    |   └── lineFormatErrorLog.txt
+    ├── profiling
+    |   ├── Profiler.ipynb
+    |   └── Summary.ipynb
     ├── insight_testsuite
-        └── run_tests.sh
+        ├── run_tests.sh
         └── tests
             └── test_features
             |   ├── log_input
@@ -189,98 +222,19 @@ The directory structure for your repo should look like this:
                     └── resources.txt
                     └── blocked.txt
 
-You simply clone this repo, but <b>please don't fork</b> it.
-The contents of `src` do not have to contain a single file called `process_log.py`, you are free to include one or more files and name them as you wish.
-
-## Testing your directory structure and output format
-
-To make sure that your code has the correct directory structure and the format of the output files are correct, we included a test script, called `run_tests.sh` in the `insight_testsuite` folder.
-
-The tests are stored simply as text files under the `insight_testsuite/tests` folder. Each test should have a separate folder and within should have a `log_input` folder for `log.txt` and a `log_output` folder for outputs corresponding to the current test.
-
-You can run the test with the following from the `insight_testsuite` folder:
-
-    insight_testsuite~$ ./run_tests.sh 
-
-On a failed test, the output of `run_tests.sh` should look like:
-
-    [FAIL]: test_features (hosts.txt)
-    [FAIL]: test_features (resources.txt)
-    [PASS]: test_features (hours.txt)
-    [FAIL]: test_features (blocked.txt)
-    [Thu Mar 30 16:28:01 PDT 2017] 1 of 4 tests passed
-
-On success:
-
-    [PASS]: test_features (hosts.txt)
-    [PASS]: test_features (resources.txt)
-    [PASS]: test_features (hours.txt)
-    [PASS]: test_features (blocked.txt)
-    [Thu Mar 30 16:25:57 PDT 2017] 4 of 4 tests passed
 
 
 
-One test has been provided as a way to check your formatting and simulate how we will be running tests when you submit your solution. We urge you to write your own additional tests here as well as for your own programming language. `run_tests.sh` should alert you if the directory structure is incorrect.
 
-Your submission must pass at least the provided test in order to pass the coding challenge.
+
+
+
 
 ## Instructions to submit your solution
 * To submit your entry please use the link you receieved in your coding challenge invite email
-* You will only be able to submit through the link one time 
-* Do NOT attach a file - we will not admit solutions which are attached files 
+* You will only be able to submit through the link one time
+* Do NOT attach a file - we will not admit solutions which are attached files
 * Use the submission box to enter the link to your github repo or bitbucket ONLY
 * Link to the specific repo for this project, not your general repo
 * Put any comments in the RADME File inside your Project repo, not in the submission box
-* We are unable to accept coding challenges that are emailed to us 
-
-# FAQ
-
-Here are some common questions we've received. If you have additional questions, please email us at `cc@insightdataengineering.com` and we'll answer your questions as quickly as we can, and update this FAQ.
-
-### Which Github link should I submit?
-You should submit the URL for the top-level root of your repository. For example, this repo would be submitted by copying the URL `https://github.com/InsightDataScience/fansite-analytics-challenge` into the appropriate field on the application. Do NOT try to submit your coding challenge using a pull request, which would make your source code publicly available.
-
-### Do I need a private Github repo?
-No, you may use a public repo, there is no need to purchase a private repo. You may also submit a link to a Bitbucket repo if you prefer.
-
-### May I use R, Matlab, or other analytics programming languages to solve the challenge?
-It's important that your implementation scales to handle large amounts of data. While many of our Fellows have experience with R and Matlab, applicants have found that these languages are unable to process data in a scalable fashion, so you should consider another language.
-
-### May I use distributed technologies like Hadoop or Spark?
-While you're welcome to do so, your code will be tested on a single machine so there may not be a significant benefit to using these technologies prior to the program. With that said, learning about distributed systems is a valuable skill for all data engineers.
-
-### What sort of system should I use to run my program on (Windows, Linux, Mac)?
-You may write your solution on any system, but your source code should be portable and work on all systems. Additionally, your run.sh must be able to run on either Unix or Linux, as that's the system that will be used for testing. Linux machines are the industry standard for most data engineering teams, so it is helpful to be familiar with this. If you're currently using Windows, we recommend using tools like Cygwin or Docker, or a free online IDE such as Cloud9.
-
-### How fast should my program run?
-While there are no strict performance guidelines to this coding challenge, we will take the amount of time your program takes into consideration in grading the challenge. Therefore, you should design and develop your program in the most optimal way. 
-
-### Can I use pre-built packages, modules, or libraries?
-This coding challenge can be completed without any "exotic" packages. While you may use publicly available packages, modules, or libraries, you must document any dependencies in your accompanying README file. When we review your submission, we will download these libraries and attempt to run your program. If you do use a package, you should always ensure that the module you're using works efficiently for the specific use-case in the challenge, since many libraries are not designed for large amounts of data.
-
-### Can I use a database engine?
-This coding challenge can be completed without the use of a database. However, if you must use one, it must be a publicly available one that can be easily installed with minimal configuration.
-
-### Will you email me if my code doesn't run?
-Unfortunately, we receive hundreds of submissions in a very short time and are unable to email individuals if code doesn't compile or run. This is why it's so important to document any dependencies you have, as described in the previous question. We will do everything we can to properly test your code, but this requires good documentation. More so, we have provided a test suite so you can confirm that your directory structure and format are correct.
-
-### Do I need to use multi-threading?
-No, your solution doesn't necessarily need to include multi-threading - there are many solutions that don't require multiple threads/cores or any distributed systems, but instead use efficient data structures.
-
-### What should the format of the output be?
-In order to be tested correctly, you must use the format described above. You can ensure that you have the correct format by using the testing suite we've included. If you are still unable to get the correct format from the debugging messages in the suite, please email us at `cc@insightdataengineering.com`.
-
-### Should I check if the files in the input directory are text files or non-text files(binary)?
-No, for simplicity you may assume that all of the files in the input directory are text files, with the format as described above.
-
-### Can I use an IDE like Eclipse or IntelliJ to write my program?
-Yes, you can use what ever tools you want - as long as your run.sh script correctly runs the relevant target files and creates the `hosts.txt`, `hours.txt`, `resources.txt`, `blocked.txt` files in the `log_output` directory.
-
-### What should be in the log_input directory?
-You can put any text file you want in the directory since our testing suite will replace it. Indeed, using your own input files would be quite useful for testing. The file size limit on Github is 100 MB so you won't be able to include the provided input file in your log_input directory.
-
-### How will the coding challenge be evaluated?
-Generally, we will evaluate your coding challenge with a testing suite that provides a variety of inputs and checks the corresponding output. This suite will attempt to use your `run.sh` and is fairly tolerant to different runtime environments. Of course, there are many aspects (e.g. clean code, documentation) that cannot be tested by our suite, so each submission will also be reviewed manually by a data engineer.
-
-### How long will it take for me to hear back from you about my submission?
-We receive hundreds of submissions and try to evaluate them all in a timely manner. We try to get back to all applicants within two or three weeks of submission, but if you have a specific deadline that requires expedited review, you may email us at `cc@insightdataengineering.com`.
+* We are unable to accept coding challenges that are emailed to us
